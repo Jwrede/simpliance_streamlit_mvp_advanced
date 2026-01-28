@@ -1,0 +1,10 @@
+services:
+  simplayce-advanced:
+    build: .
+    container_name: simplayce-advanced
+    ports:
+      - "8502:8502"
+    restart: unless-stopped
+    environment:
+      - STREAMLIT_SERVER_PORT=8502
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
