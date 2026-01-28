@@ -10,20 +10,9 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- 2. CUSTOM CSS (DARK MODE OPTIMIZED) ---
-# Das hier fixet die "weißen Kästen". Wir erzwingen dunkle Hintergründe für die Boxen.
+# --- 2. CUSTOM CSS ---
 st.markdown("""
 <style>
-    /* KPI Boxen Styling für Dark Mode */
-    div.stMetric {
-        background-color: #262730;
-        padding: 15px;
-        border-radius: 8px;
-        border: 1px solid #464b5c;
-    }
-    /* Schriftfarbe in Metrics erzwingen (falls Streamlit zickt) */
-    div.stMetric > div { color: white !important; }
-    
     /* Etwas Abstand für die Tabs */
     .stTabs [data-baseweb="tab-list"] { gap: 10px; }
 </style>
@@ -64,7 +53,7 @@ with st.sidebar:
     ai_impact = st.slider("AI Efficiency Impact", 0, 30, 10, format="%d%%", help="Flächenersparnis durch Automatisierung")
     
     st.markdown("---")
-    st.caption("Advanced Simulation v1.1 (Dark Mode Fix)")
+    st.caption("Advanced Simulation v1.2")
 
 # --- 4. CALCULATION ENGINE ---
 results = []
@@ -149,20 +138,19 @@ with tab1:
         
         fig_map = px.scatter(
             df_grid, x="x", y="y", color="Status",
-            color_discrete_map={"Belegt (Aktiv)": "#ef553b", "Eingespart (Remote/AI)": "#00cc96", "Reserve": "#262730"},
+            color_discrete_map={"Belegt (Aktiv)": "#ef553b", "Eingespart (Remote/AI)": "#00cc96", "Reserve": "#9ca3af"},
             symbol_sequence=["square"], height=500
         )
         fig_map.update_traces(marker=dict(size=18, line=dict(width=0))) # Randlos für cleaneren Look
         
-        # DARK MODE FIX für Plotly
+        # Theme-aware Plotly Layout
         fig_map.update_layout(
             paper_bgcolor="rgba(0,0,0,0)", # Transparent
             plot_bgcolor="rgba(0,0,0,0)",  # Transparent
-            font=dict(color="white"),      # Weiße Schrift
             xaxis=dict(showgrid=False, visible=False), 
             yaxis=dict(showgrid=False, visible=False, scaleanchor="x"),
             margin=dict(t=10,l=10,r=10,b=10),
-            legend=dict(orientation="h", y=1.05, font=dict(color="white"))
+            legend=dict(orientation="h", y=1.05)
         )
         st.plotly_chart(fig_map, use_container_width=True)
 
@@ -175,7 +163,7 @@ with tab1:
         
         🟢 **Grün:** Durch New Work & AI eingesparte Fläche (= Cash Savings)
         
-        ⚫ **Dunkel:** Reserve / Nicht genutzt
+        ⚪ **Grau:** Reserve / Nicht genutzt
         """)
 
 with tab2:
@@ -187,12 +175,10 @@ with tab2:
         color_discrete_map={"Bedarf": "#3498db", "Einsparung": "#95a5a6"}
     )
     
-    # DARK MODE FIX für Bar Chart
+    # Theme-aware Bar Chart
     fig_bar.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(color="white"),
-        legend=dict(font=dict(color="white"))
+        plot_bgcolor="rgba(0,0,0,0)"
     )
     
     st.plotly_chart(fig_bar, use_container_width=True)
